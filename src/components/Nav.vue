@@ -1,34 +1,91 @@
+<script setup>
+import { computed } from 'vue'
+import router from '../router.js'
+
+const title = computed(() => router.currentRoute.value.path.substring(1))
+
+const hotkey = e => {
+  // 改成 Ctrl + Q 跳出功能表，方向鍵選擇
+  if (e.altKey && e.shiftKey) {
+    // can't use A, I
+    switch (e.key) {
+      case 'M':
+      case 'm':
+        console.log(e.key, 'Menu')
+        router.push('/')
+        break
+      case 'S':
+      case 's':
+        console.log(e.key, 'search')
+        // router.push('/')
+        break
+      case 'D':
+      case 'd':
+        console.log(e.key, 'date')
+        router.push('/date')
+        break
+      case 'C':
+      case 'c':
+        console.log(e.key, 'clock')
+        router.push('/clock')
+        break
+      case 'P':
+      case 'p':
+        console.log(e.key, 'pomodoro')
+        router.push('/pomodoro')
+        break
+      case 'N':
+      case 'n':
+        console.log(e.key, 'note')
+        router.push('/note')
+        break
+      case 'R':
+      case 'r':
+        console.log(e.key, 'reference')
+        router.push('/reference')
+        break
+      default:
+        console.log('Alt + Shift + M -> Menu')
+    }
+  }
+}
+document.addEventListener('keydown', hotkey)
+</script>
+
 <template>
-  <router-link class="tool_group" to="/">
-    <i class="fa-solid fa-fish"></i>
-    <ul>
-      <li>
-        <router-link active-class="active-link" to="/date">
-          <i class="fa-solid fa-calendar-days"></i>
-        </router-link>
-      </li>
-      <li>
-        <router-link active-class="active-link" to="/clock">
-          <i class="fa-solid fa-stopwatch"></i>
-        </router-link>
-      </li>
-      <li>
-        <router-link active-class="active-link" to="/todo">
-          <i class="fa-solid fa-calendar-days"></i>
-        </router-link>
-      </li>
-      <li>
-        <router-link active-class="active-link" to="/note">
-          <i class="fa-solid fa-file-pen"></i>
-        </router-link>
-      </li>
-      <li>
-        <router-link active-class="active-link" to="/reference">
-          <i class="fa-solid fa-link"></i>
-        </router-link>
-      </li>
-    </ul>
-  </router-link>
+  <div>
+    <router-link class="tool_group" to="/">
+      <i class="fa-solid fa-fish"></i>
+      <ul>
+        <li>
+          <router-link active-class="active-link" to="/date">
+            <i class="fa-solid fa-calendar-days"></i>
+          </router-link>
+        </li>
+        <li>
+          <router-link active-class="active-link" to="/clock">
+            <i class="fa-solid fa-stopwatch"></i>
+          </router-link>
+        </li>
+        <li>
+          <router-link active-class="active-link" to="/pomodoro">
+            <i class="fa-solid fa-calendar-days"></i>
+          </router-link>
+        </li>
+        <li>
+          <router-link active-class="active-link" to="/note">
+            <i class="fa-solid fa-file-pen"></i>
+          </router-link>
+        </li>
+        <li>
+          <router-link active-class="active-link" to="/reference">
+            <i class="fa-solid fa-link"></i>
+          </router-link>
+        </li>
+      </ul>
+    </router-link>
+    <p>{{ title }}</p>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -37,16 +94,16 @@
   font-size: 2rem;
   opacity: 1;
   i {
-    margin-right: 3px;
+    padding-right: .3rem;
+    border-radius: 50%;
     transform: rotate(0);
-    transition: transform .5s;
+    transition: transform .5s ease-out;
   }
   &:hover > i {
-    transform: rotate(-25deg);
+    transform: rotate(-23.5deg);
   }
 
   ul {
-
     list-style-type: none;
     display: flex;
     justify-content: center;
@@ -83,6 +140,16 @@
     opacity: 1;
     visibility: visible;
     transition: opacity .4s, visibility .4s;
+  }
+}
+div {
+  display: flex;
+  justify-content: center;
+  p {
+    font-size: 2rem;
+    &:first-letter {
+      text-transform: uppercase;
+    }
   }
 }
 </style>
