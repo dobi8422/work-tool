@@ -4,11 +4,10 @@
       <h2>快捷鍵<br> Alt + Shift + __</h2>
       <router-link to="/">功能表 M</router-link>
       <router-link to="/search">搜尋 S</router-link>
-      <router-link to="/date">日曆 D</router-link>
-      <router-link to="/clock">計時 C</router-link>
+      <router-link to="/calender">日曆 C</router-link>
       <router-link to="/pomodoro">番茄 P</router-link>
-      <router-link to="/note">筆記 N</router-link>
-      <router-link to="/reference">參考資料 R</router-link>
+      <router-link to="/note">備忘錄 N</router-link>
+      <router-link to="/collection">網站收錄 W</router-link>
     </div>
   </div>
 </template>

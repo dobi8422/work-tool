@@ -19,15 +19,10 @@ const hotkey = e => {
         console.log(e.key, 'search')
         // router.push('/')
         break
-      case 'D':
-      case 'd':
-        console.log(e.key, 'date')
-        router.push('/date')
-        break
       case 'C':
       case 'c':
-        console.log(e.key, 'clock')
-        router.push('/clock')
+        console.log(e.key, 'Calender')
+        router.push('/calender')
         break
       case 'P':
       case 'p':
@@ -39,10 +34,10 @@ const hotkey = e => {
         console.log(e.key, 'note')
         router.push('/note')
         break
-      case 'R':
-      case 'r':
-        console.log(e.key, 'reference')
-        router.push('/reference')
+      case 'W':
+      case 'w':
+        console.log(e.key, 'collection')
+        router.push('/collection')
         break
       default:
         console.log('Alt + Shift + M -> Menu')
@@ -58,13 +53,8 @@ document.addEventListener('keydown', hotkey)
       <i class="fa-solid fa-fish"></i>
       <ul>
         <li>
-          <router-link active-class="active-link" to="/date">
+          <router-link active-class="active-link" to="/calender">
             <i class="fa-solid fa-calendar-days"></i>
-          </router-link>
-        </li>
-        <li>
-          <router-link active-class="active-link" to="/clock">
-            <i class="fa-solid fa-stopwatch"></i>
           </router-link>
         </li>
         <li>
@@ -78,7 +68,7 @@ document.addEventListener('keydown', hotkey)
           </router-link>
         </li>
         <li>
-          <router-link active-class="active-link" to="/reference">
+          <router-link active-class="active-link" to="/collection">
             <i class="fa-solid fa-link"></i>
           </router-link>
         </li>
