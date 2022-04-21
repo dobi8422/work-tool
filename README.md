@@ -25,11 +25,6 @@
 
 ## 待優化
 
-* pomodoro
-  * edit 可選擇休息or工作時間
-  * 和休息時間自動切換
-  * 加入通知音效
-
 * 時鐘
   * 倒數
   * 計時
@@ -40,7 +35,8 @@
     * 自動排序~~
 
 * firebase匯入使用者資料 -> 儲存localstorage~
-  * todo Timeset -> 編輯後存回firebase, localstorage
+  * pomodoro Timeset -> 編輯後存回firebase, localstorage
+  * note
 
 通知訊息 右上?跳出透明框?
 hotkey -> 改成 Ctrl + Q 跳出功能表，方向鍵選擇
@@ -56,5 +52,7 @@ nav紅點通知/跳出
 
 /日歷/記事本
 
-* todo
-  * bug?? run + edit -> input 3位數以上
+* pomodoro
+  * 時間沒00:00警告!!
+
+* 做更多工具，[參考](https://tw.piliapp.com/timer/stopwatch/)

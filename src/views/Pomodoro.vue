@@ -1,41 +1,75 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
+import ElectronGamePop from '../assets/ElectronGamePop.mp3'
 
-const min = ref(0)
-const sec = ref(2)
+const nowMin = ref(25)
+const nowSec = ref(0)
 // edit
 const editState = ref(false)
-const editMin = ref(min.value)
-const editSec = ref(sec.value)
+const editMin = ref(nowMin.value)
+const editSec = ref(nowSec.value)
 // pomodoro mode
 const pomo = ref(true)
-const pomoMin = ref(0)
-const pomoSec = ref(1)
+const pomoMin = ref(5)
+const pomoSec = ref(0)
 // pomodoro edit
 const editPomoMin = ref(pomoMin.value)
 const editPomoSec = ref(pomoSec.value)
 
+const nowEdit = computed(() => {
+  return reactive({
+    min: pomo.value
+      ? editMin.value
+        ? editMin.value
+        : 0
+      : editPomoMin.value
+        ? editPomoMin.value
+        : 0,
+    sec: pomo.value
+      ? editSec.value
+        ? editSec.value
+        : 0
+      : editPomoSec.value
+        ? editPomoSec.value
+        : 0
+  })
+})
+
 const updateTime = () => {
-  const nowEditMin = pomo.value ? editMin.value : editPomoMin.value
-  const nowEditSec = pomo.value ? editSec.value : editPomoSec.value
-  min.value = nowEditMin
-  sec.value = nowEditSec
+  nowMin.value = nowEdit.value.min
+  nowSec.value = nowEdit.value.sec
 }
 
 const edit = () => {
-  let nowEditMin = pomo.value ? editMin.value : editPomoMin.value
-  let nowEditSec = pomo.value ? editSec.value : editPomoSec.value
-  if (nowEditMin === 0 && nowEditSec === 0) {
-    console.log('no')
-    // 通知訊息 不可為零
+  if (nowEdit.value.min === 0 && nowEdit.value.sec === 0) {
+    console.log('通知訊息 不可為零')
+    return
   }
-  if (nowEditMin > 100) {
-    nowEditMin = parseInt(nowEditMin / 10)
+  if (nowEdit.value.min > 100) {
+    nowEdit.value.min = parseInt(nowEdit.value.min / 10)
     // 通知訊息 min超過60對身體不好
+    pomo.value
+      ? editMin.value = nowEdit.value.min
+      : editPomoMin.value = nowEdit.value.min
   }
-  if (nowEditSec > 100) nowEditSec = parseInt(nowEditSec / 10)
-  if (nowEditMin > 60) nowEditMin = 60
-  if (nowEditSec > 59) nowEditSec = 59
+  if (nowEdit.value.sec > 100) {
+    nowEdit.value.sec = parseInt(nowEdit.value.sec / 10)
+    pomo.value
+      ? editSec.value = nowEdit.value.sec
+      : editPomoSec.value = nowEdit.value.sec
+  }
+  if (nowEdit.value.min > 60) {
+    nowEdit.value.min = 60
+    pomo.value
+      ? editMin.value = 60
+      : editPomoMin.value = 60
+  }
+  if (nowEdit.value.sec > 59) {
+    nowEdit.value.sec = 59
+    pomo.value
+      ? editSec.value = 60
+      : editPomoSec.value = 60
+  }
 
   updateTime()
   editState.value = !editState.value
@@ -48,11 +82,11 @@ const resetState = ref(false)
 const timer = ref('')
 const run = () => {
   const countdown = () => {
-    if (sec.value !== 0) {
-      sec.value--
-    } else if (min.value !== 0) {
-      min.value--
-      sec.value = 59
+    if (nowSec.value !== 0) {
+      nowSec.value--
+    } else if (nowMin.value !== 0) {
+      nowMin.value--
+      nowSec.value = 59
     } else {
       timeUp()
     }
@@ -79,15 +113,25 @@ const timeUp = () => {
   stop()
   timeUpState.value = true
   pomo.value = !pomo.value
-  updateTime()
+  noticeSound()
+}
+
+// notification sound
+const audio = new Audio(ElectronGamePop)
+const noticeSound = () => {
+  audio.play()
+  setTimeout(function () {
+    audio.pause()
+    audio.currentTime = 0
+  }, 150)
 }
 </script>
 
 <template>
   <div>
     <div class="time">
-      <p>{{ min >= 10 ? min : `0${min}` }}</p>:
-      <p>{{ sec >= 10 ? sec : `0${sec}` }}</p>
+      <p>{{ nowMin >= 10 ? nowMin : `0${nowMin}` }}</p>:
+      <p>{{ nowSec >= 10 ? nowSec : `0${nowSec}` }}</p>
     </div>
 
     <div class="button_group">
@@ -101,7 +145,7 @@ const timeUp = () => {
         <i class="fa-solid fa-arrow-rotate-left rotate"></i>
       </button>
       <button @click="reset" v-if="resetState && timeUpState" class="next_pomo">
-        {{ pomo ? '🍅' : '💤' }}
+        {{ pomo ? '💤→🍅' : '🍅→💤' }}
       </button>
       <button @click="edit" v-if="!resetState && !editState">
         <i class="fa-solid fa-gear"></i>
@@ -118,13 +162,15 @@ const timeUp = () => {
       <input type="number" oninput="
         if(value.length>2)value=value.slice(0,2);
         if(value>60)value=60;
-        if(value<0)value=0" name="" id="" v-model="editMin"
+        if(value<0)value=0;
+        " name="" id="" v-model="editMin"
       >
       ：
       <input type="number" oninput="
         if(value.length>2)value=value.slice(0,2);
         if(value>59)value=59;
-        if(value<0)value=0" name="" id="" v-model="editSec"
+        if(value<0)value=0;
+        " name="" id="" v-model="editSec"
       >
     </div>
 
@@ -135,13 +181,15 @@ const timeUp = () => {
       <input type="number" oninput="
         if(value.length>2)value=value.slice(0,2);
         if(value>60)value=60;
-        if(value<0)value=0" name="" id="" v-model="editPomoMin"
+        if(value<0)value=0;
+        " name="" id="" v-model="editPomoMin"
       >
       ：
       <input type="number" oninput="
         if(value.length>2)value=value.slice(0,2);
         if(value>59)value=59;
-        if(value<0)value=0" name="" id="" v-model="editPomoSec"
+        if(value<0)value=0;
+        " name="" id="" v-model="editPomoSec"
       >
     </div>
   </div>
@@ -182,12 +230,13 @@ const timeUp = () => {
   }
   .next_pomo {
     background: rgba($text, .15);
-    border-radius: 50%;
+    // border-radius: 50%;
     // padding: 0 .4rem;
+    width: 9rem;
     line-height: 3.5rem;
     height: auto;
     &:hover {
-      background: rgba($text, .6);
+      background: rgba($text, .4);
     }
   }
 }
@@ -217,9 +266,15 @@ const timeUp = () => {
     border-radius: 50%;
     padding: 0 .4rem;
     line-height: 3.5rem;
+    &:hover {
+      background: rgba($text, .4);
+    }
   }
   .pomo {
-    background: yellowgreen;
+    background: rgba(yellowgreen, .8);
+    &:hover {
+      background: rgba(yellowgreen, 1);
+    }
   }
 }
 </style>
