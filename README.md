@@ -8,8 +8,7 @@
 * Todo
 * 日歷
 * 搜尋
-* 拖曳功能
-* 自訂工作列
+* 拖曳自訂工作列
 * 網站收藏
 
 ---
@@ -25,10 +24,16 @@
 
 ## 待優化
 
-* 其他作品
+* todo
+  * 顯示時間按鈕 ，隱藏時間~~
+  * chechbox css?
+  * select color 調整，顯示目前顏色，不要用文字
+  * 右鍵edit todo color 仿google日曆
+
+* 其他作品更新
   * 圖片網址全部移到firebase上~~
   * footer連接到->github作品頁
-  * 更新以前作品
+  * 更新以前作品(chat-app,covid-19,B2C)
 
 * 每次打開頁面，直接拿localstorage資料 -> firebase匯入使用者資料 -> 更改localstorage~
   * pomodoro Timeset -> 編輯後存回firebase, localstorage
@@ -45,6 +50,8 @@
 * 放入收藏的網站
 * 網頁互動 計時時網頁視窗縮小至只剩標籤，最上層?
 * 標籤有時間顯示通知時標籤顏色閃爍通知
+
+* 拖曳功能
 
 * Todo
 

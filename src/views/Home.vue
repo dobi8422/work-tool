@@ -6,7 +6,7 @@
       <router-link to="/search">搜尋 S</router-link>
       <router-link to="/calender">日曆 C</router-link>
       <router-link to="/pomodoro">番茄 P</router-link>
-      <router-link to="/note">備忘錄 N</router-link>
+      <router-link to="/Todo">待辦事項 T</router-link>
       <router-link to="/collection">網站收錄 W</router-link>
     </div>
   </div>

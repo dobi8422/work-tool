@@ -29,10 +29,10 @@ const hotkey = e => {
         console.log(e.key, 'pomodoro')
         router.push('/pomodoro')
         break
-      case 'N':
-      case 'n':
-        console.log(e.key, 'note')
-        router.push('/note')
+      case 'T':
+      case 't':
+        console.log(e.key, 'Todo')
+        router.push('/todo')
         break
       case 'W':
       case 'w':
