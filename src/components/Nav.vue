@@ -53,18 +53,18 @@ document.addEventListener('keydown', hotkey)
       <i class="fa-solid fa-fish"></i>
       <ul>
         <li>
-          <router-link active-class="active-link" to="/calender">
-            <i class="fa-solid fa-calendar-days"></i>
+          <router-link active-class="active-link" to="/todo">
+            <i class="fa-solid fa-file-pen"></i>
           </router-link>
         </li>
         <li>
           <router-link active-class="active-link" to="/pomodoro">
-            <i class="fa-solid fa-calendar-days"></i>
+            <i class="fa-solid fa-clock"></i>
           </router-link>
         </li>
         <li>
-          <router-link active-class="active-link" to="/note">
-            <i class="fa-solid fa-file-pen"></i>
+          <router-link active-class="active-link" to="/calender">
+            <i class="fa-solid fa-calendar-days"></i>
           </router-link>
         </li>
         <li>

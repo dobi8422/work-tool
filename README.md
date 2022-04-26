@@ -17,19 +17,13 @@
 
 * hotKey
 * pinia??
-* firebase
-* localstorage
+* localstorage & firebase -> 可用不同裝置更新，只留未完成事項
 * search??
 * darkMode -> other color??
 
 ## 待優化
 
-* todo
-  * 顯示時間按鈕 ，隱藏時間~~
-  * chechbox css?
-  * select color 調整，顯示目前顏色，不要用文字
-  * 右鍵edit todo color 仿google日曆
-
+* 自訂checkBox
 * 其他作品更新
   * 圖片網址全部移到firebase上~~
   * footer連接到->github作品頁
@@ -51,11 +45,12 @@
 * 網頁互動 計時時網頁視窗縮小至只剩標籤，最上層?
 * 標籤有時間顯示通知時標籤顏色閃爍通知
 
+* 日歷
+
 * 拖曳功能
 
-* Todo
-
-* 日歷
+* todo
+  * 右鍵編輯已建立的事項顏色，仿google日曆?
 
 * pomodoro
   * 新增警告通知 -> 時間edit不能00:00時

@@ -1,5 +1,8 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useStore } from '../store'
+// import db from '../firebase'
+// import { addDoc, collection, getDocs } from 'firebase/firestore'
 
 const inputTodo = reactive({
   done: false,
@@ -21,38 +24,97 @@ const addTodo = () => {
 }
 
 const allList = reactive([])
-
 const label = ref('undone')
-
 const undoneList = computed(() =>
   allList.filter(item =>
     item.done === false && item.delete === false))
-
 const completeList = computed(() =>
   allList.filter(item =>
     item.done === true && item.delete === false))
 
-const orderState = ref(true)
+const orderState = ref(false)
 const orderMode = () => {
-  if (!orderState.value) undoneList.value.sort((a, b) => a.ID - b.ID)
-  else undoneList.value.sort((a, b) => a.color - b.color)
+  !orderState.value
+    ? undoneList.value.sort((a, b) => a.ID - b.ID)
+    : undoneList.value.sort((a, b) => a.color - b.color)
   orderState.value = !orderState.value
 }
 
 const deleteMode = ref(false)
+const showDate = ref(false)
+
+// pinia & localstorage & firebase
+
+// const loacal = () => {
+//   console.log('loacal')
+// }
+const store = useStore()
+
+// store.count++
+// with autocompletion ✨
+// store.$patch({ count: store.count + 1 })
+// or using an action instead
+// store.increment()
+onMounted(() => {
+  const todoList = JSON.parse(localStorage.getItem('todoList'))
+  for (let i = 0; i < todoList.length; i++) {
+    allList[i] = todoList[i]
+  }
+})
+// window.onload = () => {
+// console.log(localStorage.getItem('todoList'))
+// allList.push(localStorage.getItem('todoList'))
+// }
+
+// 改成vue事件??
+window.onbeforeunload = () => {
+  localStorage.setItem('todoList', JSON.stringify(undoneList.value))
+}
+
+// localStorage.removeItem('todoList')
+
+// const read = async () => {
+//   const querySnapshot = await getDocs(collection(db, 'todoList'))
+//   querySnapshot.forEach((doc) => {
+//     console.log(doc.data())
+//     // RecentPost.value.push(doc.data())
+//   })
+// }
+// read()
+
+// const write = async () => {
+//   try {
+//     const docRef = await addDoc(collection(db, 'todoList'), {
+//       name: '.....',
+//       figure: '......',
+//       link: '......',
+//       outline: '......',
+//       date: '20220415'
+//     })
+//     console.log('Document written with ID: ', docRef.id)
+//   } catch (e) {
+//     console.error('Error adding document: ', e)
+//   }
+// }
+// write()
 </script>
 
 <template>
   <div>
     <div class="input">
       <input type="text" v-model="inputTodo.title" @keyup.enter="addTodo">
-      <select name="color" id="color" v-model="inputTodo.color">
-        <option class="color_1" value="1">blue</option>
-        <option class="color_2" value="2">green</option>
-        <option class="color_3" value="3">yellow</option>
-        <option class="color_4" value="4">red</option>
+      <select :class="{
+          'color_1':inputTodo.color==='1',
+          'color_2':inputTodo.color==='2',
+          'color_3':inputTodo.color==='3',
+          'color_4':inputTodo.color==='4'
+        }" name="color" id="color" v-model="inputTodo.color">
+        <option class="color_1" value="1">trivia</option>
+        <option class="color_2" value="2">routine</option>
+        <option class="color_3" value="3">important</option>
+        <option class="color_4" value="4">urgent</option>
       </select>
-      <button @click="addTodo"><i class="fa-solid fa-pen"></i></button>
+      <button @click="addTodo">↩</button>
     </div>
 
     <div class="button_group">
@@ -61,15 +123,14 @@ const deleteMode = ref(false)
         <button :class="{'active_button':label==='completed'}" @click="label='completed'">completed</button>
       </div>
       <div>
-        <button @click="orderMode" v-if="label==='undone'">
-          {{ orderState ? 'Date' : 'Color' }}
-          <i class="fa-solid fa-arrow-down-wide-short"></i>
-        </button>
+        <button id="orderButton" :class="{'color_3':!orderState}" @click="orderMode" v-if="label==='undone'"><i class="fa-solid fa-arrow-down-wide-short"></i></button>
+        <button :class="{'active_button':showDate}" @click="showDate=!showDate"><i class="fa-solid fa-clock"></i></button>
         <button :class="{'active_button':deleteMode, 'color_4':deleteMode}" @click="deleteMode=!deleteMode"><i class="fa-solid fa-trash-can"></i></button>
       </div>
     </div>
 
     <ul v-if="label==='undone'">
+      <li>{{ store.todoList.title }}</li>
       <li v-for="item in undoneList.slice().reverse()" :key="item">
         <input type="checkbox" :checked="item.done" @click="item.done=!item.done">
         <p :class="{
@@ -78,22 +139,22 @@ const deleteMode = ref(false)
           'color_3':item.color==='3',
           'color_4':item.color==='4'
         }">{{ item.title }}</p>
-        <span>{{ item.date }}</span>
+        <span v-if="showDate">{{ item.date }}</span>
         <button v-if="deleteMode" @click="item.delete=true"><i class="fa-solid fa-xmark"></i></button>
         <button v-else class="opacity_button"></button>
       </li>
-      <li v-if="!undoneList[0]">There is nothing</li>
+      <li class="color_grey" v-if="!undoneList[0]">There is nothing</li>
     </ul>
 
     <ul v-if="label==='completed'">
       <li v-for="item in completeList" :key="item">
         <input type="checkbox" :checked="item.done" @click="item.done=!item.done">
         <p>{{ item.title }}</p>
-        <span>{{ item.date }}</span>
+        <span v-if="showDate">{{ item.date }}</span>
         <button v-if="deleteMode" @click="item.delete=true"><i class="fa-solid fa-xmark"></i></button>
         <button v-else class="opacity_button"></button>
       </li>
-      <li v-if="!completeList[0]">There is nothing</li>
+      <li class="color_grey"  v-if="!completeList[0]">There is nothing</li>
     </ul>
   </div>
 </template>
@@ -115,9 +176,11 @@ const deleteMode = ref(false)
     border: none;
     font-size: 1rem;
     outline: none;
+    text-align: center;
   }
   button {
     border: none;
+    font-size: 1.5rem;
   }
 }
 
@@ -141,6 +204,12 @@ const deleteMode = ref(false)
   .active_button {
     border-bottom: none;
     opacity: 1;
+    &:hover {
+      background: none;
+      i {
+        background: none;
+      }
+    }
   }
 }
 
@@ -154,6 +223,7 @@ ul {
     font-size: 1.5rem;
     padding: .3rem 1rem;
     width: 24rem;
+    input {transform: scale(1.25);}
     p {
       user-select: text;
       cursor: default;
@@ -202,9 +272,26 @@ ul {
 
 .color_1 {color: deepskyblue;}
 .color_2 {color: yellowgreen;}
-.color_3 {color: gold;}
+.color_3 {
+  color: gold;
+  i {
+    color: gold;
+  }
+}
 .color_4 {
   color: crimson;
   i {color: crimson;}
+}
+.color_grey {
+  color: grey;
+}
+#orderButton {
+  opacity: 1;
+  &:hover {
+    background: none;
+    i {
+      background: none;
+    }
+  }
 }
 </style>

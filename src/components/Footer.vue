@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>© 2022 <a href="https://github.com/dobi8422/work-tool" target="_blank">Dosss</a>. All Rights Reserved.</p>
+    <p>© 2022 <a href="https://github.com/dobi8422/work-tool" target="_blank">Dosss</a>. All Rights Reserved. <a href="https://dobi8422.github.io/dosss/" target="_blank">Dosss' Blog</a></p>
   </div>
 </template>
 
