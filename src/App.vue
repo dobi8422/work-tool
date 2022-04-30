@@ -1,13 +1,11 @@
 <script setup>
 import Nav from './components/Nav.vue'
-// import Search from './components/Search.vue'
 import Footer from './components/Footer.vue'
 </script>
 
 <template>
   <div>
     <Nav />
-    <!-- <Search /> -->
     <router-view id="content"/>
     <Footer />
   </div>

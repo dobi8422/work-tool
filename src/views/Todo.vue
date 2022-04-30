@@ -1,8 +1,5 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useStore } from '../store'
-// import db from '../firebase'
-// import { addDoc, collection, getDocs } from 'firebase/firestore'
 
 const inputTodo = reactive({
   done: false,
@@ -21,6 +18,7 @@ const addTodo = () => {
   allList.push(JSON.parse(JSON.stringify(inputTodo)))
   inputTodo.title = ''
   label.value = 'undone'
+  localStorage.setItem('todoList', JSON.stringify(undoneList.value))
 }
 
 const allList = reactive([])
@@ -40,63 +38,18 @@ const orderMode = () => {
   orderState.value = !orderState.value
 }
 
-const deleteMode = ref(false)
-const showDate = ref(false)
-
-// pinia & localstorage & firebase
-
-// const loacal = () => {
-//   console.log('loacal')
-// }
-const store = useStore()
-
-// store.count++
-// with autocompletion ✨
-// store.$patch({ count: store.count + 1 })
-// or using an action instead
-// store.increment()
-onMounted(() => {
-  const todoList = JSON.parse(localStorage.getItem('todoList'))
-  for (let i = 0; i < todoList.length; i++) {
-    allList[i] = todoList[i]
-  }
-})
-// window.onload = () => {
-// console.log(localStorage.getItem('todoList'))
-// allList.push(localStorage.getItem('todoList'))
-// }
-
-// 改成vue事件??
-window.onbeforeunload = () => {
+const listCheckItem = ID => {
+  allList.forEach(item => { if (item.ID === ID) item.done = !item.done })
   localStorage.setItem('todoList', JSON.stringify(undoneList.value))
 }
 
-// localStorage.removeItem('todoList')
+const deleteMode = ref(false)
+const showDate = ref(false)
 
-// const read = async () => {
-//   const querySnapshot = await getDocs(collection(db, 'todoList'))
-//   querySnapshot.forEach((doc) => {
-//     console.log(doc.data())
-//     // RecentPost.value.push(doc.data())
-//   })
-// }
-// read()
-
-// const write = async () => {
-//   try {
-//     const docRef = await addDoc(collection(db, 'todoList'), {
-//       name: '.....',
-//       figure: '......',
-//       link: '......',
-//       outline: '......',
-//       date: '20220415'
-//     })
-//     console.log('Document written with ID: ', docRef.id)
-//   } catch (e) {
-//     console.error('Error adding document: ', e)
-//   }
-// }
-// write()
+onMounted(() => {
+  const todoList = JSON.parse(localStorage.getItem('todoList'))
+  for (let i = 0; i < todoList.length; i++) allList[i] = todoList[i]
+})
 </script>
 
 <template>
@@ -130,9 +83,8 @@ window.onbeforeunload = () => {
     </div>
 
     <ul v-if="label==='undone'">
-      <li>{{ store.todoList.title }}</li>
       <li v-for="item in undoneList.slice().reverse()" :key="item">
-        <input type="checkbox" :checked="item.done" @click="item.done=!item.done">
+        <input type="checkbox" :checked="item.done" @click="listCheckItem(item.ID)">
         <p :class="{
           'color_1':item.color==='1',
           'color_2':item.color==='2',
@@ -148,7 +100,7 @@ window.onbeforeunload = () => {
 
     <ul v-if="label==='completed'">
       <li v-for="item in completeList" :key="item">
-        <input type="checkbox" :checked="item.done" @click="item.done=!item.done">
+        <input type="checkbox" :checked="item.done" @click="listCheckItem(item.ID)">
         <p>{{ item.title }}</p>
         <span v-if="showDate">{{ item.date }}</span>
         <button v-if="deleteMode" @click="item.delete=true"><i class="fa-solid fa-xmark"></i></button>
@@ -231,7 +183,6 @@ ul {
       height: 1.8rem;
 
       width: 15rem;
-      z-index: 1;
       overflow:hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

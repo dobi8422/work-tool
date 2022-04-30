@@ -1,6 +1,16 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import ElectronGamePop from '../assets/ElectronGamePop.mp3'
+
+onMounted(() => {
+  const arr = JSON.parse(localStorage.getItem('pomodoro'))
+  if (arr !== null) {
+    nowMin.value = editMin.value = arr[0]
+    nowSec.value = editSec.value = arr[1]
+    pomoMin.value = editPomoMin.value = arr[2]
+    pomoSec.value = editPomoSec.value = arr[3]
+  }
+})
 
 const nowMin = ref(25)
 const nowSec = ref(0)
@@ -74,6 +84,11 @@ const edit = () => {
   updateTime()
   editState.value = !editState.value
   resetState.value = false
+
+  const localStorageSettingTime = ref([
+    editMin.value, editSec.value, editPomoMin.value, editPomoSec.value
+  ])
+  localStorage.setItem('pomodoro', JSON.stringify(localStorageSettingTime.value))
 }
 
 // operate
@@ -87,9 +102,7 @@ const run = () => {
     } else if (nowMin.value !== 0) {
       nowMin.value--
       nowSec.value = 59
-    } else {
-      timeUp()
-    }
+    } else timeUp()
   }
   timer.value = setInterval(countdown, 1000)
   runState.value = true

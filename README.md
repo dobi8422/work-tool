@@ -4,7 +4,7 @@
 
 ## 小工具
 
-* pomodoro番茄鐘
+* pomodoro
 * Todo
 * 日歷
 * 搜尋
@@ -16,22 +16,11 @@
 ## 使用
 
 * hotKey
-* pinia??
-* localstorage & firebase -> 可用不同裝置更新，只留未完成事項
+* localstorage
 * search??
 * darkMode -> other color??
 
 ## 待優化
-
-* 自訂checkBox
-* 其他作品更新
-  * 圖片網址全部移到firebase上~~
-  * footer連接到->github作品頁
-  * 更新以前作品(chat-app,covid-19,B2C)
-
-* 每次打開頁面，直接拿localstorage資料 -> firebase匯入使用者資料 -> 更改localstorage~
-  * pomodoro Timeset -> 編輯後存回firebase, localstorage
-  * todo
 
 * 通知訊息 右上?跳出透明框?
 * hotkey -> 改成 Ctrl + Q 跳出功能表，方向鍵選擇
@@ -54,5 +43,6 @@
 
 * pomodoro
   * 新增警告通知 -> 時間edit不能00:00時
+  * pinia 儲存時間?，可以瀏覽別頁時間繼續
 
 * 做更多工具，[參考](https://tw.piliapp.com/timer/stopwatch/)
