@@ -1,6 +1,10 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, defineEmits } from 'vue'
 import ElectronGamePop from '../assets/ElectronGamePop.mp3'
+
+const emit = defineEmits({
+  noticeMessage: String
+})
 
 onMounted(() => {
   const arr = JSON.parse(localStorage.getItem('pomodoro'))
@@ -52,12 +56,12 @@ const updateTime = () => {
 
 const edit = () => {
   if (nowEdit.value.min === 0 && nowEdit.value.sec === 0) {
-    console.log('通知訊息 不可為零')
+    emit('noticeMessage', '時間不可為零')
+    setTimeout(() => emit('noticeMessage', ''), 1500)
     return
   }
   if (nowEdit.value.min > 100) {
     nowEdit.value.min = parseInt(nowEdit.value.min / 10)
-    // 通知訊息 min超過60對身體不好
     pomo.value
       ? editMin.value = nowEdit.value.min
       : editPomoMin.value = nowEdit.value.min
@@ -132,6 +136,13 @@ const timeUp = () => {
 // notification sound
 const audio = new Audio(ElectronGamePop)
 const noticeSound = () => {
+  emit('noticeMessage', `完成專注${nowEdit.value.min}:${
+      nowEdit.value.sec >= 10
+        ? nowEdit.value.sec
+        : `0${nowEdit.value.sec}`
+    }`)
+  setTimeout(() => emit('noticeMessage', ''), 1500)
+
   audio.play()
   setTimeout(function () {
     audio.pause()

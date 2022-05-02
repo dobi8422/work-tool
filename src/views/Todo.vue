@@ -18,7 +18,7 @@ const addTodo = () => {
   allList.push(JSON.parse(JSON.stringify(inputTodo)))
   inputTodo.title = ''
   label.value = 'undone'
-  localStorage.setItem('todoList', JSON.stringify(undoneList.value))
+  localStorage.setItem('todoList', JSON.stringify(allList))
 }
 
 const allList = reactive([])
@@ -32,7 +32,7 @@ const completeList = computed(() =>
 
 const orderState = ref(false)
 const orderMode = () => {
-  !orderState.value
+  orderState.value
     ? undoneList.value.sort((a, b) => a.ID - b.ID)
     : undoneList.value.sort((a, b) => a.color - b.color)
   orderState.value = !orderState.value
@@ -40,7 +40,7 @@ const orderMode = () => {
 
 const listCheckItem = ID => {
   allList.forEach(item => { if (item.ID === ID) item.done = !item.done })
-  localStorage.setItem('todoList', JSON.stringify(undoneList.value))
+  localStorage.setItem('todoList', JSON.stringify(allList))
 }
 
 const deleteMode = ref(false)
@@ -76,7 +76,7 @@ onMounted(() => {
         <button :class="{'active_button':label==='completed'}" @click="label='completed'">completed</button>
       </div>
       <div>
-        <button id="orderButton" :class="{'color_3':!orderState}" @click="orderMode" v-if="label==='undone'"><i class="fa-solid fa-arrow-down-wide-short"></i></button>
+        <button id="orderButton" :class="{'color_3':orderState}" @click="orderMode" v-if="label==='undone'"><i class="fa-solid fa-arrow-down-wide-short"></i></button>
         <button :class="{'active_button':showDate}" @click="showDate=!showDate"><i class="fa-solid fa-clock"></i></button>
         <button :class="{'active_button':deleteMode, 'color_4':deleteMode}" @click="deleteMode=!deleteMode"><i class="fa-solid fa-trash-can"></i></button>
       </div>

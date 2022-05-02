@@ -1,12 +1,20 @@
 <script setup>
+import { ref } from 'vue'
 import Nav from './components/Nav.vue'
 import Footer from './components/Footer.vue'
+import Notice from './components/Notice.vue'
+
+const emit = ref()
+const noticeMessage = noticeMessage => {
+  emit.value = noticeMessage
+}
 </script>
 
 <template>
   <div>
     <Nav />
-    <router-view id="content"/>
+    <Notice :noticeMessage=emit />
+    <router-view id="content" @noticeMessage=noticeMessage />
     <Footer />
   </div>
 </template>

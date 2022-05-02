@@ -1,13 +1,11 @@
 <template>
   <div>
     <div class="item">
-      <h2>快捷鍵<br> Alt + Shift + __</h2>
-      <router-link to="/">功能表 M</router-link>
-      <router-link to="/search">搜尋 S</router-link>
-      <router-link to="/calender">日曆 C</router-link>
-      <router-link to="/pomodoro">番茄 P</router-link>
-      <router-link to="/Todo">待辦事項 T</router-link>
-      <router-link to="/collection">網站收錄 W</router-link>
+      <h2><span>&lt;</span>快捷鍵<span>&gt;</span><br>Alt + Shift + __</h2>
+      <router-link to="/calender">Calender</router-link>
+      <router-link to="/Todo">Todo</router-link>
+      <router-link to="/pomodoro">Pomodoro</router-link>
+      <router-link to="/collection">Website collection</router-link>
     </div>
   </div>
 </template>
@@ -28,11 +26,22 @@
     font-size: 2.5rem;
     border-bottom: 2px solid $text;
     padding-bottom: 1.5rem;
+    span {
+      margin: 0 1rem;
+      color: yellowgreen;
+    }
   }
   a {
     cursor: default;
     text-decoration: none;
     border-radius: 15px;
+    text-align: start;
+    &::first-letter {
+      color: yellowgreen;
+    }
+    &:not(:last-child) {
+      padding-bottom: 2rem;
+    }
   }
 }
 </style>

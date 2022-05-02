@@ -1,46 +1,43 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import router from '../router.js'
 
 const title = computed(() => router.currentRoute.value.path.substring(1))
 
+const navList = reactive(['/calender', '/todo', '/pomodoro', '/collection'])
+
+const nowNav = ref(0)
+
 const hotkey = e => {
-  // 改成 Ctrl + Q 跳出功能表，方向鍵選擇
-  if (e.altKey && e.shiftKey) {
-    // can't use A, I
+  if (e.shiftKey) {
     switch (e.key) {
-      case 'M':
-      case 'm':
-        console.log(e.key, 'Menu')
+      case '<':
+        nowNav.value === 0
+          ? nowNav.value = navList.length - 1
+          : nowNav.value--
+        router.push(navList[nowNav.value])
+        break
+      case '>':
+        nowNav.value === navList.length - 1
+          ? nowNav.value = 0
+          : nowNav.value++
+        router.push(navList[nowNav.value])
+        break
+      case '~':
         router.push('/')
         break
-      case 'S':
-      case 's':
-        console.log(e.key, 'search')
-        // router.push('/')
-        break
-      case 'C':
-      case 'c':
-        console.log(e.key, 'Calender')
+      case '!':
         router.push('/calender')
         break
-      case 'P':
-      case 'p':
-        console.log(e.key, 'pomodoro')
+      case '@':
         router.push('/pomodoro')
         break
-      case 'T':
-      case 't':
-        console.log(e.key, 'Todo')
+      case '#':
         router.push('/todo')
         break
-      case 'W':
-      case 'w':
-        console.log(e.key, 'collection')
+      case '$':
         router.push('/collection')
         break
-      default:
-        console.log('Alt + Shift + M -> Menu')
     }
   }
 }
@@ -53,6 +50,11 @@ document.addEventListener('keydown', hotkey)
       <i class="fa-solid fa-fish"></i>
       <ul>
         <li>
+          <router-link active-class="active-link" to="/calender">
+            <i class="fa-solid fa-calendar-days"></i>
+          </router-link>
+        </li>
+        <li>
           <router-link active-class="active-link" to="/todo">
             <i class="fa-solid fa-file-pen"></i>
           </router-link>
@@ -60,11 +62,6 @@ document.addEventListener('keydown', hotkey)
         <li>
           <router-link active-class="active-link" to="/pomodoro">
             <i class="fa-solid fa-clock"></i>
-          </router-link>
-        </li>
-        <li>
-          <router-link active-class="active-link" to="/calender">
-            <i class="fa-solid fa-calendar-days"></i>
           </router-link>
         </li>
         <li>
