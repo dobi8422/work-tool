@@ -2,22 +2,26 @@
 import { computed, reactive, ref } from 'vue'
 import router from '../router.js'
 
-const title = computed(() => router.currentRoute.value.path.substring(1))
-
-const navList = reactive(['/calender', '/todo', '/pomodoro', '/collection'])
-
-const nowNav = ref(0)
+const title = computed(() => {
+  const str = router.currentRoute.value.path.substring(1)
+  nowNav.value = navList.indexOf(router.currentRoute.value.path)
+  return str.search(/todo/) === -1 ? str : 'todo'
+})
+const navList = reactive(['/calender', '/todo-list', '/todo-post-it', '/pomodoro', '/collection'])
+const nowNav = ref()
 
 const hotkey = e => {
   if (e.shiftKey) {
     switch (e.key) {
       case '<':
+      case 'ArrowLeft':
         nowNav.value === 0
           ? nowNav.value = navList.length - 1
           : nowNav.value--
         router.push(navList[nowNav.value])
         break
       case '>':
+      case 'ArrowRight':
         nowNav.value === navList.length - 1
           ? nowNav.value = 0
           : nowNav.value++
@@ -33,9 +37,12 @@ const hotkey = e => {
         router.push('/pomodoro')
         break
       case '#':
-        router.push('/todo')
+        router.push('/todo-list')
         break
       case '$':
+        router.push('/todo-post-it')
+        break
+      case '%':
         router.push('/collection')
         break
     }
@@ -45,7 +52,7 @@ document.addEventListener('keydown', hotkey)
 </script>
 
 <template>
-  <div>
+  <div v-if="title!==''">
     <router-link class="tool_group" to="/">
       <i class="fa-solid fa-fish"></i>
       <ul>

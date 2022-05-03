@@ -48,7 +48,8 @@ const showDate = ref(false)
 
 onMounted(() => {
   const todoList = JSON.parse(localStorage.getItem('todoList'))
-  for (let i = 0; i < todoList.length; i++) allList[i] = todoList[i]
+  todoList.forEach((item, i) => { allList[i] = todoList[i] })
+  orderMode()
 })
 </script>
 
@@ -217,6 +218,9 @@ ul {
     .opacity_button {
       padding: .15rem .66rem;
       border: none;
+      &:hover {
+        background: none;
+      }
     }
   }
 }

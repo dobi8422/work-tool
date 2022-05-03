@@ -5,9 +5,7 @@ import Footer from './components/Footer.vue'
 import Notice from './components/Notice.vue'
 
 const emit = ref()
-const noticeMessage = noticeMessage => {
-  emit.value = noticeMessage
-}
+const noticeMessage = noticeMessage => { emit.value = noticeMessage }
 </script>
 
 <template>
@@ -42,7 +40,7 @@ body {
   }
 }
 #content {
-  min-height: calc(100vh - 50px);
+  min-height: calc(100vh);
   display: flex;
   flex-flow: column;
   align-items: center;
